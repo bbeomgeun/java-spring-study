@@ -33,4 +33,8 @@ public class Bag {
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+
+    public Long getAmount() {
+        return this.amount;
+    }
 }
