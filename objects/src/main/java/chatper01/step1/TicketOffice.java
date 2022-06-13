@@ -24,7 +24,7 @@ public class TicketOffice {
         this.amount -= amount;
     }
 
-    public void plusAmount(Long Amount) {
+    public void plusAmount(Long amount) {
         this.amount += amount;
     }
 }
