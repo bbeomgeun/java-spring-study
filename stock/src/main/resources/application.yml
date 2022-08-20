@@ -1,0 +1,29 @@
+spring:
+  h2:
+    console:
+      enabled: true  # H2 ? ??? ?????? ??
+      path: /test_db  # ??? ??
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/stock_example
+#    username: root
+#    password: 1234
+  datasource:
+    driver-class-name: org.h2.Driver  #h2 ???? ??
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
