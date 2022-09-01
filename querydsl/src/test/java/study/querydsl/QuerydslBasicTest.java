@@ -597,4 +597,57 @@ public class QuerydslBasicTest {
     private Predicate ageEq(Integer ageCond) {
         return ageCond != null ? member.age.eq(ageCond) : null;
     }
+
+    @Test
+    public void bulkUpdate() {
+
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+        // 쿼리는 정상 실행, 영속성 컨텍스트 거치지 않고 바로 DB Update
+
+        em.flush(); // 캐시를 내보내서 DB와 맞춤
+        em.clear();
+
+        List<Member> result = queryFactory.select(member)
+                .fetch();
+        // 조회 시 영속성 컨텍스트에서 우선권을 가짐으로써 캐시값을 가져옴
+
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+        // repeatable read 발생
+    }
+
+    @Test
+    public void bulkAdd() {
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+    }
+
+    @Test
+    public void bulkDelete() {
+        queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+    }
+
+    @Test
+    public void sqlFunction() {
+        List<String> result = queryFactory
+                .select(Expressions.stringTemplate(
+                        "function('replace', {0}, {1}, {2})",
+                        member.username, "member", "m"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
 }
